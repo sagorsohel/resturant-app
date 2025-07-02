@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const colors = require("colors");
 const ConnectDb = require("./services/DBConnect");
 const app = express();
-
+const router = require("./routes/index");
 // Middleware
 app.use(express.json());
 // Parse JSON bodies
@@ -18,6 +18,13 @@ dotenv.config();
 
 // Database connection
 ConnectDb();
+
+// Routes
+app.use(router);
+
+app.get("/", (req, res) => {
+  res.send("<h1>Welcome to Restaurant App API</h1>");
+});
 
 app.listen(process.env.PORT || 8000, () => {
   console.log(
