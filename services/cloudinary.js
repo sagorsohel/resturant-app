@@ -1,7 +1,10 @@
 // config/cloudinary.js
 const cloudinary = require("cloudinary").v2;
+const dotenv = require("dotenv");
 
 const fs= require("fs");
+dotenv.config();
+console.log(process.env.CLOUDINARY_API_KEY, process.env.CLOUDINARY_API_SECRET, process.env.CLOUDINARY_CLOUD_NAME, "Cloudinary credentials loaded successfully".green.bold);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
