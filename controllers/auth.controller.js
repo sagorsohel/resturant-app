@@ -1,9 +1,14 @@
+const { sendErrorResponse } = require("../utlis/responseHelper");
+
 const registerController = async (req, res) => {
   // Logic for user registration
 
   try {
-    const { name, email, password, phone, address, profilePhoto } = req.body;
+    const { name, email, password, phone, address, profilePhoto } = req?.body;
 
+
+
+    // Check if all required fields are provided
     const missingFields = [];
 
     if (!name) missingFields.push("name");
@@ -13,16 +18,12 @@ const registerController = async (req, res) => {
     if (!address) missingFields.push("address");
 
     if (missingFields.length > 0) {
-      return res.status(400).json({
-        message:
-          "The following fields are required: " + missingFields.join(", "),
-        missingFields,
-        success: false,
-      });
+      return sendErrorResponse(res,400,  "The following fields are required: " + missingFields.join(", "),
+    { missingFields });
     }
   } catch (error) {
     console.error("Error during registration:", error);
-    res.status(500).json({ message: "Internal server error", success: false });
+    return sendErrorResponse(res,500, "Internal server error", )
   }
 };
 

@@ -1,10 +1,22 @@
-// utils/responseHelper.js
+
+
 function sendErrorResponse(res, statusCode, message, extraData = {}) {
   return res.status(statusCode).json({
-    message,
     success: false,
+    message,
     ...extraData,
   });
 }
 
-module.exports = { sendErrorResponse };
+function sendSuccessResponse(res, statusCode, message, extraData = {}) {
+  return res.status(statusCode).json({
+    success: true,
+    message,
+    ...extraData,
+  });
+}
+
+module.exports = {
+  sendErrorResponse,
+  sendSuccessResponse,
+};
