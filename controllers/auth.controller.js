@@ -1,12 +1,13 @@
-const { sendErrorResponse } = require("../utlis/responseHelper");
+const User = require("../models/user.model");
+const { sendErrorResponse, sendSuccessResponse } = require("../utlis/responseHelper");
+const bcrypt = require("bcrypt");
 
 const registerController = async (req, res) => {
   // Logic for user registration
+  const saltRounds = 10;
 
   try {
     const { name, email, password, phone, address, profilePhoto } = req?.body;
-
-
 
     // Check if all required fields are provided
     const missingFields = [];
@@ -18,23 +19,62 @@ const registerController = async (req, res) => {
     if (!address) missingFields.push("address");
 
     if (missingFields.length > 0) {
-      return sendErrorResponse(res,400,  "The following fields are required: " + missingFields.join(", "),
-    { missingFields });
+      return sendErrorResponse(
+        res,
+        400,
+        "The following fields are required: " + missingFields.join(", "),
+        { missingFields }
+      );
     }
 
     // Check if the user already exists
-    const existingUser = await User.findOne(email);
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return sendErrorResponse(res, 400, "User already exists with this email");
     }
 
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // Create a new user object
+    const newUser = {
+      name,
+      email,
+      phone,
+      address,
+      profilePhoto,
+      password: hashedPassword,
+    };
+
+
+    // Save the new user to the database
+    const user= await User.create(newUser);
+    if (!user) {
+      return sendErrorResponse(res, 500, "Failed to create user");
+    }
+    // Respond with success
+
+    // Exclude the password from the response
     
+    const userResponse = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      profilePhoto: user.profilePhoto,
+      role: user.role,
+    };
 
+
+    return sendSuccessResponse(res,201,'User registered successfully', {
+        user: userResponse
+    })
+  
 
   } catch (error) {
     console.error("Error during registration:", error);
-    return sendErrorResponse(res,500, "Internal server error", )
+    return sendErrorResponse(res, 500, "Internal server error");
   }
 };
 
