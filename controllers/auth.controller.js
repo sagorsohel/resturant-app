@@ -141,7 +141,7 @@ const loginController = async (req, res) => {
     }
 
     // generate a JWT token (if you have JWT setup)
-     const token = jwt.sign( userResponse , process.env.JWT_SECRET, { expiresIn: '30d' });
+     const token = jwt.sign( {id:existingUser._id} , process.env.JWT_SECRET, { expiresIn: '30d' });
 
    
 
