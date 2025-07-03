@@ -100,12 +100,13 @@ const loginController = async (req, res) => {
     }
 
     const existingUser= await User.findOne({email})
+    console.log(existingUser)
     if (!existingUser) {
       return sendErrorResponse(res, 400, "User does not exist with this email");
     }
 
     // Check if the password is correct
-    const isPasswordValid =  bcrypt.compare(password, existingUser.password);
+    const isPasswordValid =await  bcrypt.compare(password, existingUser.password);
 
     if (!isPasswordValid) {
       return sendErrorResponse(res, 400, "Invalid password");
