@@ -78,6 +78,46 @@ const registerController = async (req, res) => {
   }
 };
 
+
+// login function
+const loginController = async (req, res) => {
+
+
+  const { email, password } = req.body;
+
+  const missingFields = [];
+    if (!email) missingFields.push("email");
+    if (!password) missingFields.push("password");
+    if (missingFields.length > 0) {
+      return sendErrorResponse(
+        res,
+        400,
+        "The following fields are required: " + missingFields.join(", "),
+        { missingFields }
+      );
+    }
+
+    const existingUser= await User.findOne({email})
+    if (!existingUser) {
+      return sendErrorResponse(res, 400, "User does not exist with this email");
+    }
+
+    // Check if the password is correct
+    const isPasswordValid =  bcrypt.compare(password, existingUser.password);
+
+    if (!isPasswordValid) {
+      return sendErrorResponse(res, 400, "Invalid password");
+    }
+
+
+    // Exclude the password from the response
+    const userResponse = {
+        
+    }
+
+}
+
 module.exports = {
   registerController,
+  loginController
 };
