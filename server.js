@@ -21,7 +21,8 @@ app.use(cors());
 // Enable CORS for all routes
 dotenv.config();
 // Load environment variables from .env file
-
+app.use(express.urlencoded({ extended: true }));
+// Parse URL-encoded request bodies
 
 
 
