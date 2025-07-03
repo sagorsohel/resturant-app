@@ -31,7 +31,7 @@ ConnectDb();
 
 
 // Routes
-app.use(router);
+app.use('/api/v1',router);
 
 
 // Serve a welcome message at the root URL

@@ -4,6 +4,15 @@ const bcrypt = require("bcrypt");
 
 const jwt = require('jsonwebtoken');
 
+
+
+
+
+// ----------------------------------------------------------------
+//  ------------------register function--------------------------------
+// ---------------------------------------------------------------
+
+
 const registerController = async (req, res) => {
   // Logic for user registration
   const saltRounds = 10;
@@ -81,7 +90,15 @@ const registerController = async (req, res) => {
 };
 
 
-// login function
+
+
+
+// ----------------------------------------------------------------
+//  ------------------login function--------------------------------
+// ---------------------------------------------------------------
+
+
+
 const loginController = async (req, res) => {
 
 
@@ -100,7 +117,7 @@ const loginController = async (req, res) => {
     }
 
     const existingUser= await User.findOne({email})
-    console.log(existingUser)
+    
     if (!existingUser) {
       return sendErrorResponse(res, 400, "User does not exist with this email");
     }
@@ -134,6 +151,11 @@ const loginController = async (req, res) => {
     });
 
 }
+
+
+
+
+
 
 module.exports = {
   registerController,
