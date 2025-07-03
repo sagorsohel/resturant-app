@@ -1,5 +1,5 @@
 const User = require("../models/user.model");
-const { sendErrorResponse, sendSuccessResponse } = require("../utlis/responseHelper");
+const { sendErrorResponse, sendSuccessResponse } = require("../utils/responseHelper");
 const bcrypt = require("bcrypt");
 
 const registerController = async (req, res) => {
