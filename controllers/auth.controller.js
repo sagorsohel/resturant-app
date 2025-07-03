@@ -2,6 +2,8 @@ const User = require("../models/user.model");
 const { sendErrorResponse, sendSuccessResponse } = require("../utils/responseHelper");
 const bcrypt = require("bcrypt");
 
+const jwt = require('jsonwebtoken');
+
 const registerController = async (req, res) => {
   // Logic for user registration
   const saltRounds = 10;
@@ -110,10 +112,25 @@ const loginController = async (req, res) => {
     }
 
 
+    // generate a JWT token (if you have JWT setup)
+     const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+
     // Exclude the password from the response
     const userResponse = {
-        
+        _id: existingUser._id,
+        name: existingUser.name,
+        email: existingUser.email,
+        phone: existingUser.phone,
+        address: existingUser.address,
+        profilePhoto: existingUser.profilePhoto,
+        role: existingUser.role,
+
     }
+
+    return sendSuccessResponse(res, 200, 'User logged in successfully', {
+        user: userResponse,
+        token: token
+    });
 
 }
 
