@@ -111,12 +111,7 @@ const loginController = async (req, res) => {
     if (!isPasswordValid) {
       return sendErrorResponse(res, 400, "Invalid password");
     }
-
-
-    // generate a JWT token (if you have JWT setup)
-     const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-
-    // Exclude the password from the response
+ // Exclude the password from the response
     const userResponse = {
         _id: existingUser._id,
         name: existingUser.name,
@@ -127,6 +122,11 @@ const loginController = async (req, res) => {
         role: existingUser.role,
 
     }
+
+    // generate a JWT token (if you have JWT setup)
+     const token = jwt.sign( userResponse , process.env.JWT_SECRET, { expiresIn: '30d' });
+
+   
 
     return sendSuccessResponse(res, 200, 'User logged in successfully', {
         user: userResponse,
